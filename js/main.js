@@ -29,21 +29,33 @@ Game.prototype.clearSnake = function(){
 };
 
 Game.prototype.start = function() {
-  setInterval(this.update.bind(this), 100);
+  this.intervalID = setInterval(this.update.bind(this), 100);
 };
 
 Game.prototype.update = function(){
   this.snake.moveForward(this.rows,this.columns);
   if(this.snake.hasEatenFood(this.food)){
-    // this.snake.growUp();
+    this.snake.growUp();
     this.clearFood();
     this.generateFood();
     this.drawFood();
+  }
+  if(this.snake.hasEatenItSelf()){
+    this.stop();
+    alert('Game Over');
   }
 
   this.clearSnake();
   this.drawSnake();
 };
+
+Game.prototype.stop = function(){
+  if(this.intervalID){
+    clearInterval(this.intervalID);
+    this.intervalID = undefined;
+  }
+};
+
 
 //Method that catch the key taht was press, so the snake can star moving.
 Game.prototype.assignControlsToKeys = function(){
@@ -60,6 +72,15 @@ Game.prototype.assignControlsToKeys = function(){
         break;
       case 40:
         this.snake.goDown();
+        break;
+      case 80:
+        if(this.intervalID){
+          this.stop();
+        }
+        else{
+          this.start();
+        }
+
         break;
     }
   }.bind(this));
