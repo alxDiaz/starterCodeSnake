@@ -22,6 +22,19 @@ Game.prototype.drawSnake = function(){
   });
 };
 
+Game.prototype.clearSnake = function(){
+  $('.snake').removeClass('snake');
+};
+
+Game.prototype.start = function() {
+  setInterval(this.update.bind(this), 100);
+};
+
+Game.prototype.update = function(){
+  this.snake.moveForward(this.rows,this.columns);
+  this.clearSnake();
+  this.drawSnake();
+};
 
 
 $(document).ready(function(){
@@ -32,5 +45,6 @@ $(document).ready(function(){
     snake: new Snake()
   });
 
-  game.drawSnake();
+//  game.drawSnake();
+  game.start();
 });
