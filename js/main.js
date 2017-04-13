@@ -34,10 +34,18 @@ Game.prototype.start = function() {
 
 Game.prototype.update = function(){
   this.snake.moveForward(this.rows,this.columns);
+  if(this.snake.hasEatenFood(this.food)){
+    // this.snake.growUp();
+    this.clearFood();
+    this.generateFood();
+    this.drawFood();
+  }
+
   this.clearSnake();
   this.drawSnake();
 };
 
+//Method that catch the key taht was press, so the snake can star moving.
 Game.prototype.assignControlsToKeys = function(){
   $('body').on('keydown', function(e){
     switch (e.keyCode) {
@@ -57,6 +65,7 @@ Game.prototype.assignControlsToKeys = function(){
   }.bind(this));
 };
 
+//Method for generate the food on a random position of the grid.
 Game.prototype.generateFood = function(){
   this.food = {
     row: Math.floor(Math.random() * this.rows),
@@ -64,13 +73,18 @@ Game.prototype.generateFood = function(){
   };
 };
 
+//Method that draw the snake's food on the grid.
 Game.prototype.drawFood = function(){
   var selector = '[data-row=' + this.food.row + '][data-column=' + this.food.column + ']';
   $(selector).addClass('food');
 };
 
+Game.prototype.clearFood = function(){
+  $('.food').removeClass('food');
+  this.food = undefined;
+};
+
 $(document).ready(function(){
-  console.log("hola");
   var game = new Game({
     rows: 50,
     columns: 50,
